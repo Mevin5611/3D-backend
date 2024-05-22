@@ -1,10 +1,10 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const fs = require('fs');
-
 const app = express();
 
 // Ensure the uploads directory exists
@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(uploadDir));
 
-mongoose.connect('mongodb://localhost:27017/3dmodels', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
@@ -61,7 +61,7 @@ app.get('/models', (req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
